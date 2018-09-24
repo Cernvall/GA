@@ -1,0 +1,37 @@
+package ga;
+
+import java.awt.*;
+import java.awt.event.*;
+
+public class GA extends Frame implements ActionListener {
+
+    public GA() {
+        setTitle("Dubbel Pendel");
+        setSize(600, 400);
+        setUndecorated(false);
+        setBackground(Color.RED);
+
+        setVisible(true);
+        addWindowListener(closer());
+    }
+
+    public static void main(String[] args) {
+        new GA();
+    }
+
+    public WindowListener closer() {
+        return new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                System.exit(0);
+            }
+        };
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+}
