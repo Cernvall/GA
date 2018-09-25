@@ -1,0 +1,52 @@
+package ga;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Panel;
+import java.awt.image.BufferedImage;
+import java.util.Timer;
+import java.util.TimerTask;
+
+class Pendel extends Panel{
+    double  x=0, vx=0.1;
+    BufferedImage img= new BufferedImage(1920,1080, BufferedImage.TYPE_INT_ARGB);
+    
+    TimerTask task= new TimerTask(){
+        @Override
+        public void run() {
+            x += vx;
+            if( x < 0 || x > 1920) vx= -vx;
+            vx *= 1.01;
+            repaint();
+        }
+      
+    };
+
+    @Override
+    public void update(Graphics g) {
+        img.getGraphics().clearRect(0,0,1920,1080);
+        paint( img.getGraphics());
+        g.drawImage( img, 0,0, null);
+    }
+
+    
+    
+    
+    @Override
+    public void paint(Graphics g) {
+        g.drawRect((int)x,100, 40,40);
+    }
+    
+    
+    
+    
+    public Pendel(){
+        
+        setPreferredSize(new Dimension(800,600));
+        setBackground(Color.pink);
+        
+        Timer timer= new Timer();
+        timer.scheduleAtFixedRate(task, 0, 12);
+    }
+}
