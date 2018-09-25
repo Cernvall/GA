@@ -7,17 +7,20 @@ import java.awt.Panel;
 import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
+import static java.lang.Math.*;
 
 class Pendel extends Panel{
-    double  x=0, vx=0.1;
+    double  fi= -PI/4; // + random()*PI/2
+    double vfi=0;
+    double k= 0.002;
+    
     BufferedImage img= new BufferedImage(1920,1080, BufferedImage.TYPE_INT_ARGB);
     
     TimerTask task= new TimerTask(){
         @Override
         public void run() {
-            x += vx;
-            if( x < 0 || x > 1920) vx= -vx;
-            vx *= 1.01;
+            fi += vfi;
+            vfi += k*cos(fi);
             repaint();
         }
       
@@ -35,7 +38,9 @@ class Pendel extends Panel{
     
     @Override
     public void paint(Graphics g) {
-        g.drawRect((int)x,100, 40,40);
+        double x= 400+ 200*cos(fi);
+        double y= 400+ 200*sin(fi);
+        g.drawLine(400,400, (int)x,(int)y);
     }
     
     
