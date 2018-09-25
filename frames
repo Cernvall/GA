@@ -4,13 +4,14 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class GA extends Frame implements ActionListener {
-
+    Pendel pendel= new Pendel();
+    
     public GA() {
         setTitle("Dubbel Pendel");
-        setSize(600, 400);
+        setExtendedState(Frame.MAXIMIZED_BOTH);
         setUndecorated(false);
-        setBackground(Color.RED);
-
+        add( "Center", pendel);
+        pack();
         setVisible(true);
         addWindowListener(closer());
     }
@@ -28,6 +29,9 @@ public class GA extends Frame implements ActionListener {
             }
         };
     }
+
+    
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
