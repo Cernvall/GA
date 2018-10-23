@@ -6,7 +6,7 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import java.util.HashSet;
+import java.util.*;
 
 class Pendel {
 
@@ -16,6 +16,7 @@ class Pendel {
     double vfi = 0;
     double k = 0.002;
     HashSet<Point> trail = new HashSet();
+    ArrayList<Point> trLine = new ArrayList();
 
     Pendel(int x0, int y0, int len, double fi0) {
         origo = new Point2D.Double(x0, y0);
@@ -33,14 +34,27 @@ class Pendel {
         int x = (int) (origo.x + length * cos(fi));
         int y = (int) (origo.y + length * sin(fi));
         trail.add(new Point(x, y));
+        trLine.add(new Point(x,y));
+
         g.setColor(Color.WHITE);
-        g.drawLine((int)origo.x, (int)origo.y, x, y);
+        g.drawLine((int) origo.x, (int) origo.y, x, y);
         g.fillOval((int) x - 3, (int) y - 3, 6, 6);
 
         g.setColor(new Color(40, 40, 40));
         for (Point p : trail) {
-            g.drawRect(p.x, p.y, 1, 1);
+            g.drawOval(p.x, p.y, 1, 1);
+            
+         
+
+        for (int i = 1; i < trLine.size(); i++) {
+            Point xl1 = new Point(trLine.get(i));
+            Point xl2 = new Point(trLine.get(i-1));
+            
+            g.drawLine(xl1.x,xl1.y,xl2.x,xl2.y);
+           }
+            
         }
+
     }
 
 }
