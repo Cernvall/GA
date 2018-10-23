@@ -1,0 +1,59 @@
+package ga;
+
+import java.awt.*;
+import java.awt.event.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+
+public class GA extends Frame implements ActionListener {
+
+    Pendlar pendel = new Pendlar();
+    boolean fullsize = false;
+    int x;
+
+    public GA() {
+        setTitle("Dubbel pendel");
+        setExtendedState(Frame.MAXIMIZED_BOTH);
+        setUndecorated(fullsize);
+        add("Center", pendel);
+        pack();
+        setVisible(true);
+        addWindowListener(closer());
+        addKeyListener(fullScreen());
+    }
+
+    public static void main(String[] args) {
+        new GA();
+    }
+
+    public WindowListener closer() {
+        return new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                System.exit(0);
+            }
+
+        };
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+    public boolean fullScreen(boolean fullsize) {
+        int x = 0;
+        if (KeyPressed( new KeyCodeCombination( KeyCode.F10 ))) {
+            if (x == 1) {
+                fullsize = false;
+                x = 0;
+            } else if (x == 0) {
+                fullsize = true;
+                x = 1;
+            }
+        }
+        return fullsize;
+    }
+
+}
