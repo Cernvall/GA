@@ -1,0 +1,46 @@
+package ga;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.geom.Point2D;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import java.util.HashSet;
+
+class Pendel {
+
+    Point2D.Double origo;
+    double length;
+    double fi;
+    double vfi = 0;
+    double k = 0.002;
+    HashSet<Point> trail = new HashSet();
+
+    Pendel(int x0, int y0, int len, double fi0) {
+        origo = new Point2D.Double(x0, y0);
+        length = len;
+        fi = fi0;
+    }
+
+    void move() {
+
+        fi += vfi;
+        vfi += k * cos(fi);
+    }
+
+    void paint(Graphics g) {
+        int x = (int) (origo.x + length * cos(fi));
+        int y = (int) (origo.y + length * sin(fi));
+        trail.add(new Point(x, y));
+        g.setColor(Color.WHITE);
+        g.drawLine((int)origo.x, (int)origo.y, x, y);
+        g.fillOval((int) x - 3, (int) y - 3, 6, 6);
+
+        g.setColor(new Color(40, 40, 40));
+        for (Point p : trail) {
+            g.drawRect(p.x, p.y, 1, 1);
+        }
+    }
+
+}
