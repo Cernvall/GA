@@ -1,0 +1,46 @@
+package ga;
+
+import java.awt.Color;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.*;
+import static java.lang.Math.*;
+
+class Pendlar extends Panel {
+    Pendel pendel= new Pendel(400,400, 400, -PI/4);
+    Pendel pendel2= new Pendel(600,400, 400, PI/4);
+
+    BufferedImage img = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
+
+    TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            pendel.move();
+            pendel2.move();
+            repaint();
+        }
+
+    };
+
+    @Override
+    public void update(Graphics g) {
+        img.getGraphics().clearRect(0, 0, 1920, 1080);
+        paint(img.getGraphics());
+        g.drawImage(img, 0, 0, null);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        pendel.paint(g);
+        pendel2.paint(g);
+    }
+
+    public Pendlar() {
+
+        setPreferredSize(new Dimension(800, 600));
+        setBackground(Color.pink);
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(task, 0, 12);
+    }
+}
