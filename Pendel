@@ -15,30 +15,85 @@ class Pendel {
     double fi;
     double vfi = 0;
     double k = 0.002;
+    double m1= 20;
+    double m2= 20;
+    double v1 =0;
+    double v2 =0;
+    double x1 =0;
+    double x2 =0;
+    double y1 =0;
+    double y2 =0;
+    double r1=0;
+    double r2=0;
+    double a1=0;
+    double a2=0;
+    double a1v=0;
+    double a1a=0;
+    double a2v=0;
+    double a2a=0;
+    double G =0.1;
+    
     HashSet<Point> trail = new HashSet();
     ArrayList<Point> trLine = new ArrayList();
 
     Pendel(int x0, int y0, int len, double fi0) {
         origo = new Point2D.Double(x0, y0);
-        length = len;
-        fi = fi0;
+        r1=len;
+        r2=len;
+        a1= fi0;
+        a2= fi0;
     }
 
     void move() {
-
-        fi += vfi;
-        vfi += k * cos(fi);
+      
+        double num1 = -G*(2*m1+m2)*sin(a1);
+        double num2 = -m2*G*sin(a1-(2*a2));
+        double num3 = -2 * sin(a1-a2)*m2;
+        double num4 = a2v*a2v*r2+a1v*a1v*r1*cos(a1-a2);
+        double den  = r1*(2*m1+m2-m2*cos(2*a1-2*a2));
+        
+        a1a = (num1+num2+num3*num4)/den;
+        
+        num1=2*sin(a1-a2);
+        num2= a1v*a1v*r1*(m1+m2);
+        num3 = G*(m1+m2)*cos(a1);
+        num4 = a2v*a2v*r2*m2*cos(a1-a2);
+        den = r2*(2*m1+m2-m2*cos(2*a1-2*a2)); 
+        
+        a2a= (num1*num2+num3+num4)/den;
+        
+        x1= r1 * sin(a1);
+        y1= r1 * cos(a1);
+        
+        x2= x1 + r2*sin(a2);
+        y2= y1 + r2*cos(a2);
+      
+        
+        a1v += a1a;
+        a2v += a2a;
+        a1 += a1v;
+        a2 += a2v;
+        
     }
 
     void paint(Graphics g) {
-        int x = (int) (origo.x + length * cos(fi));
-        int y = (int) (origo.y + length * sin(fi));
-        trail.add(new Point(x, y));
-        trLine.add(new Point(x,y));
+        
 
+                
+        int xp1 = (int) (origo.x + x1);
+        int yp1 = (int) (origo.y + y1);
+        int xp2 = (int) (origo.x + x2);
+        int yp2 = (int) (origo.y + y2);
+        trail.add(new Point(xp2, yp2));
+        trLine.add(new Point(xp2,yp2));
+
+        
         g.setColor(Color.WHITE);
-        g.drawLine((int) origo.x, (int) origo.y, x, y);
-        g.fillOval((int) x - 3, (int) y - 3, 6, 6);
+        g.drawLine((int) origo.x, (int) origo.y, (int) xp1, (int) yp1);
+        g.fillOval((int) xp1 - 3, (int) yp1 - 3, 6, 6);
+        
+        g.drawLine((int) xp1, (int) yp1, (int) xp2, (int) yp2);
+        g.fillOval((int) xp2 - 3, (int) yp2 - 3, 6, 6);
 
         g.setColor(new Color(40, 40, 40));
         for (Point p : trail) {
