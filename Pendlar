@@ -7,16 +7,26 @@ import java.util.*;
 import static java.lang.Math.*;
 
 class Pendlar extends Panel {
-    Pendel pendel= new Pendel(400,400, 400, -PI/4);
-    Pendel pendel2= new Pendel(600,400, 400, PI/4);
 
+    int posX = 600;
+    int posY = 400;
+    int len1 = 150;
+    int len2 = 150;
+    double v1 = 2 * PI * random() - PI;
+    double v2 = 2 * PI * random() - PI;
+
+    String SLen1 = " Första pendelns längd : " + Integer.toString(len1);
+    String SLen2 = " Andra pendelns längd : " + Integer.toString(len2);
+    String SVin1 = "Startvinkel första pendeln : " + Double.toString(v1) + " radianer";
+    String SVin2 = "Startvinkel andra pendeln : " + Double.toString(v2) + " radianer";
+
+    Pendel pendel = new Pendel(posX, posY, len1, len2, v1, v2);
     BufferedImage img = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
 
     TimerTask task = new TimerTask() {
         @Override
         public void run() {
             pendel.move();
-            pendel2.move();
             repaint();
         }
 
@@ -32,13 +42,23 @@ class Pendlar extends Panel {
     @Override
     public void paint(Graphics g) {
         pendel.paint(g);
-        pendel2.paint(g);
+
+        g.drawString(SLen1, 10, 20);
+        g.drawString(SLen2, 10, 35);
+        
+        g.drawString(SVin1, 700, 20);
+        g.drawString(SVin2, 700, 35);
+        
+        g.setColor(Color.WHITE);
+        g.drawOval(1150, 75, 150, 150);
+        //fixa nedanstående!!!
+        g.drawLine(1225, 150,(int) (cos(v1)*75)+1225,(int) (sin(v1)*75)+150);
     }
 
     public Pendlar() {
 
         setPreferredSize(new Dimension(800, 600));
-        setBackground(Color.pink);
+        setBackground(Color.black);
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(task, 0, 12);
