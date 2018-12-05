@@ -49,10 +49,10 @@ class Pendlar extends Panel {
         g.drawString(SVin1, 700, 20);
         g.drawString(SVin2, 700, 35);
         
+        //Fpixe nedanstående
         g.setColor(Color.WHITE);
         g.drawOval(1150, 75, 150, 150);
-        //fixa nedanstående!!!
-        g.drawLine(1225, 150,(int) (cos(v1)*75)+1225,(int) (sin(v1)*75)+150);
+        g.drawLine(1225,150, (int) (sin(v1+3*PI/2)*75)+1225,(int)(cos(v1+3*PI/2)*75)+150);
     }
 
     public Pendlar() {
