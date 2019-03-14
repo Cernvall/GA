@@ -2,25 +2,34 @@ package ga;
 
 import java.awt.Color;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import static java.lang.Math.*;
 
-class Pendlar extends Panel {
+class Pendlar extends Panel implements MouseMotionListener, MouseListener {
+
+    int mousex = 0;
+    int mousey = 0;
 
     int posX = 600;
     int posY = 400;
     int len1 = 150;
     int len2 = 150;
-    double v1 = 2 * PI * random() - PI;
-    double v2 = 2 * PI * random() - PI;
+    double v1 = 2 * PI * random();
+    double v2 = 2 * PI * random();
+
+    Pendel pendel;
 
     String SLen1 = " Första pendelns längd : " + Integer.toString(len1);
     String SLen2 = " Andra pendelns längd : " + Integer.toString(len2);
     String SVin1 = "Startvinkel första pendeln : " + Double.toString(v1) + " radianer";
     String SVin2 = "Startvinkel andra pendeln : " + Double.toString(v2) + " radianer";
 
-    Pendel pendel = new Pendel(posX, posY, len1, len2, v1, v2);
     BufferedImage img = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
 
     TimerTask task = new TimerTask() {
@@ -45,14 +54,14 @@ class Pendlar extends Panel {
 
         g.drawString(SLen1, 10, 20);
         g.drawString(SLen2, 10, 35);
-        
+
         g.drawString(SVin1, 700, 20);
         g.drawString(SVin2, 700, 35);
-        
-        //Fpixe nedanstående
-        g.setColor(Color.WHITE);
-        g.drawOval(1150, 75, 150, 150);
-        g.drawLine(1225,150, (int) (sin(v1+3*PI/2)*75)+1225,(int)(cos(v1+3*PI/2)*75)+150);
+
+        if (hypot(mousex - 1225, mousey - 150) <= 75) {
+            double a1 = atan2(mousey - 150, mousex - 1225);
+            g.drawLine(1225, 150, (int) (cos(a1) * 75) + 1225, (int) (sin(a1) * 75) + 150);
+        }
     }
 
     public Pendlar() {
@@ -60,7 +69,65 @@ class Pendlar extends Panel {
         setPreferredSize(new Dimension(800, 600));
         setBackground(Color.black);
 
+        pendel = new Pendel(posX, posY, len1, len2, v1, v2);
+
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(task, 0, 12);
+
+        addMouseListener(this);
+        addMouseMotionListener(this);
+        setFocusable(true);
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        mousex = e.getX();
+        mousey = e.getY();
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        mousex = e.getX();
+        mousey = e.getY();
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (hypot(mousex - 1225, mousey - 150) <= 75) {
+            double a1 = atan2(mousex - 1225, mousey - 150);
+
+            int posX = 600;
+            int posY = 400;
+            int len1 = 150;
+            int len2 = 150;
+
+            double a2 = 2 * PI * random();
+            if (a2 > 3.14) {
+                a2 = 3.14 - a2;
+            }
+
+            pendel = new Pendel(posX, posY, len1, len2, a1, a2);
+            SVin1 = "Startvinkel första pendeln : " + Double.toString(a1) + " radianer";
+            SVin2 = "Startvinkel andra pendeln : " + Double.toString(a2) + " radianer";
+
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }
